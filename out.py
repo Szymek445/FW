@@ -1,16 +1,42 @@
-import win32com.client as win32
-from datetime import datetime
-import osoutlook = win32.Dispatch('outlook.application')
-mail = outlook.CreateItem(0)mail.Subject = 'Currencies Exchange Prices as of ' + datetime.now().strftime('%#d %b %Y %H:%M')
-mail.To = "yeung.cyda@gmail.com"
-attachment = mail.Attachments.Add(os.getcwd() + "\\Currencies.png")
-attachment.PropertyAccessor.SetProperty("http://schemas.microsoft.com/mapi/proptag/0x3712001F", "currency_img")
-mail.HTMLBody = r"""
-Dear Carrie,<br><br>
-The highlighted of currencies exchange prices is as follow:<br><br>
-<img src="cid:currency_img"><br><br>
-For more details, you can check the table in the Excel file attached.<br><br>
-Best regards,<br>
-Yeung
-"""
-mail.Attachments.Add(os.getcwd() + "\\Currencies.xlsx")mail.Send()
+from datetime import datetime, timedelta, date
+from workalendar.europe import Germany, France, UnitedKingdom
+import calendar
+import holidays
+
+
+class T2_calculation():
+
+    def __init__(self):
+        self.today = datetime.today().strftime("%d/%m/20%y")
+        self.year = datetime.today().strftime("20%y")
+
+    def check_holiday(self, day):
+
+        de = Germany()
+        fr = France()
+        uk = UnitedKingdom()
+
+        de_holidays = holidays.Germany(years=[int(self.year), int(self.year)-1])
+        fr_holidays = holidays.France(years=[int(self.year), int(self.year)-1])
+        uk_holidays = holidays.UnitedKingdom(years=[int(self.year), int(self.year)-1])
+
+        if day in de_holidays:
+            raise Exception("Holiday_DE")
+            print("ERRRRRR")
+        
+        if day in fr_holidays:
+            raise Exception("Holiday_FR")
+
+        if day in uk_holidays:
+            raise Exception("Holiday_UK")
+
+    def reporting_day(self):
+
+        pass
+
+
+
+x = T2_calculation()
+# x.reporting_day()
+
+x.check_holiday("2022-01-01")
